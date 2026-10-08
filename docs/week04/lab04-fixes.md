@@ -11,3 +11,7 @@
 - Problem : Two promo cards overflowed the right edge, and long names overflowed a card vertically.
   Fix : Made the promo strip scroll sideways and let card height follow its text, limiting long names to two lines.
   Checked : Small-phone portrait and landscape, plus the tablet long-name test, no longer report PromoStrip or PromoCard overflows
+
+- Problem : Menu item names and prices overflowed the right edge on a small phone.
+  Fix : Put the name and price in the flexible part of each row, with long names limited to two lines.
+  Checked : Small-phone portrait, landscape, and long-name tests no longer report MenuTile overflows; other widgets still overflow.

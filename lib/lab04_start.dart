@@ -570,19 +570,30 @@ class MenuTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: Gap.md),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(item.name, style: text.titleMedium),
-                if (item.promo)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    'Promo',
-                    style: text.labelSmall?.copyWith(color: cs.primary),
+                    item.name,
+                    style: text.titleMedium,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-              ],
+                  if (item.promo)
+                    Text(
+                      'Promo',
+                      style: text.labelSmall?.copyWith(color: cs.primary),
+                    ),
+                  Text(
+                    rupiah(item.price),
+                    style: text.labelLarge,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
-            const Spacer(),
-            Text(rupiah(item.price), style: text.labelLarge),
             IconButton(
               tooltip: 'Tambah',
               onPressed: onAdd,
