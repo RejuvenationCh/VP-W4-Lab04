@@ -98,14 +98,47 @@ const List<String> kCategories = [
 ];
 
 const List<MenuItem> kMenu = [
-  MenuItem(id: 'm1', name: 'Nasi Goreng Spesial', category: 'Makanan', price: 18000, promo: true),
+  MenuItem(
+    id: 'm1',
+    name: 'Nasi Goreng Spesial',
+    category: 'Makanan',
+    price: 18000,
+    promo: true,
+  ),
   MenuItem(id: 'm2', name: 'Mie Ayam Bakso', category: 'Makanan', price: 15000),
-  MenuItem(id: 'm3', name: 'Sate Ayam (10 tusuk)', category: 'Makanan', price: 25000),
-  MenuItem(id: 'm4', name: 'Ayam Geprek Sambal Matah', category: 'Makanan', price: 20000, promo: true),
-  MenuItem(id: 'm5', name: 'Pisang Goreng Keju', category: 'Camilan', price: 12000),
+  MenuItem(
+    id: 'm3',
+    name: 'Sate Ayam (10 tusuk)',
+    category: 'Makanan',
+    price: 25000,
+  ),
+  MenuItem(
+    id: 'm4',
+    name: 'Ayam Geprek Sambal Matah',
+    category: 'Makanan',
+    price: 20000,
+    promo: true,
+  ),
+  MenuItem(
+    id: 'm5',
+    name: 'Pisang Goreng Keju',
+    category: 'Camilan',
+    price: 12000,
+  ),
   MenuItem(id: 'm6', name: 'Es Teh Manis', category: 'Minuman', price: 5000),
-  MenuItem(id: 'm7', name: 'Kopi Susu Gula Aren', category: 'Minuman', price: 12000),
-  MenuItem(id: 'm8', name: 'Paket Hemat Ayam + Es Teh', category: 'Paket Hemat', price: 23000, promo: true),
+  MenuItem(
+    id: 'm7',
+    name: 'Kopi Susu Gula Aren',
+    category: 'Minuman',
+    price: 12000,
+  ),
+  MenuItem(
+    id: 'm8',
+    name: 'Paket Hemat Ayam + Es Teh',
+    category: 'Paket Hemat',
+    price: 23000,
+    promo: true,
+  ),
 ];
 
 /// Exactly 200 characters. Test 5.
@@ -115,7 +148,13 @@ const String kLongName =
     'dan Taburan Bawang Goreng Renyah Khas Kota Makassar Sulsel';
 
 const List<MenuItem> kLongNameMenu = [
-  MenuItem(id: 'long', name: kLongName, category: 'Makanan', price: 45000, promo: true),
+  MenuItem(
+    id: 'long',
+    name: kLongName,
+    category: 'Makanan',
+    price: 45000,
+    promo: true,
+  ),
   ...kMenu,
 ];
 
@@ -154,7 +193,10 @@ abstract final class AppTheme {
   static ThemeData _build(Brightness brightness) {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: _seed, brightness: brightness),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: _seed,
+        brightness: brightness,
+      ),
     );
   }
 }
@@ -171,12 +213,12 @@ String rupiah(int value) {
 }
 
 IconData iconFor(String category) => switch (category) {
-      'Makanan' => Icons.rice_bowl,
-      'Minuman' => Icons.local_cafe,
-      'Camilan' => Icons.cookie,
-      'Paket Hemat' => Icons.lunch_dining,
-      _ => Icons.restaurant,
-    };
+  'Makanan' => Icons.rice_bowl,
+  'Minuman' => Icons.local_cafe,
+  'Camilan' => Icons.cookie,
+  'Paket Hemat' => Icons.lunch_dining,
+  _ => Icons.restaurant,
+};
 
 class Lab04App extends StatelessWidget {
   const Lab04App({
@@ -197,8 +239,9 @@ class Lab04App extends StatelessWidget {
       darkTheme: AppTheme.dark(),
       themeMode: themeMode,
       // Lets you drag horizontal lists with a mouse in Chrome or on desktop.
-      scrollBehavior: const MaterialScrollBehavior()
-          .copyWith(dragDevices: PointerDeviceKind.values.toSet()),
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: PointerDeviceKind.values.toSet(),
+      ),
       home: MenuScreen(items: items),
     );
   }
@@ -223,15 +266,16 @@ class _MenuScreenState extends State<MenuScreen> {
   final Map<String, int> _qty = {};
 
   List<MenuItem> get _visible => widget.items.where((item) {
-        final matchesQuery =
-            _query.isEmpty || item.name.toLowerCase().contains(_query.toLowerCase());
-        final matchesCategory = switch (_category) {
-          'Semua' => true,
-          'Promo' => item.promo,
-          _ => item.category == _category,
-        };
-        return matchesQuery && matchesCategory;
-      }).toList();
+    final matchesQuery =
+        _query.isEmpty ||
+        item.name.toLowerCase().contains(_query.toLowerCase());
+    final matchesCategory = switch (_category) {
+      'Semua' => true,
+      'Promo' => item.promo,
+      _ => item.category == _category,
+    };
+    return matchesQuery && matchesCategory;
+  }).toList();
 
   int get _count => _qty.values.fold(0, (sum, n) => sum + n);
 
@@ -248,9 +292,8 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   void _order() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Pesanan dikirim: $_count item')),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Pesanan dikirim: $_count item')));
     setState(() => _qty.clear());
   }
 
@@ -310,7 +353,11 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: CartBar(count: _count, total: _total, onOrder: _order),
+      bottomNavigationBar: CartBar(
+        count: _count,
+        total: _total,
+        onOrder: _order,
+      ),
     );
   }
 }
@@ -358,7 +405,11 @@ class StoreHeader extends StatelessWidget {
 }
 
 class CategoryBar extends StatelessWidget {
-  const CategoryBar({super.key, required this.selected, required this.onSelected});
+  const CategoryBar({
+    super.key,
+    required this.selected,
+    required this.onSelected,
+  });
 
   final String selected;
   final ValueChanged<String> onSelected;
@@ -435,7 +486,9 @@ class PromoCard extends StatelessWidget {
               const SizedBox(height: Gap.xs),
               Text(
                 item.name,
-                style: text.titleMedium?.copyWith(color: cs.onTertiaryContainer),
+                style: text.titleMedium?.copyWith(
+                  color: cs.onTertiaryContainer,
+                ),
               ),
               const Spacer(),
               Text(
@@ -473,13 +526,19 @@ class MenuTile extends StatelessWidget {
     return InkWell(
       onTap: onAdd,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Gap.md, vertical: Gap.sm),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Gap.md,
+          vertical: Gap.sm,
+        ),
         child: Row(
           children: [
             CircleAvatar(
               radius: 22,
               backgroundColor: cs.secondaryContainer,
-              child: Icon(iconFor(item.category), color: cs.onSecondaryContainer),
+              child: Icon(
+                iconFor(item.category),
+                color: cs.onSecondaryContainer,
+              ),
             ),
             const SizedBox(width: Gap.md),
             Column(
@@ -487,7 +546,10 @@ class MenuTile extends StatelessWidget {
               children: [
                 Text(item.name, style: text.titleMedium),
                 if (item.promo)
-                  Text('Promo', style: text.labelSmall?.copyWith(color: cs.primary)),
+                  Text(
+                    'Promo',
+                    style: text.labelSmall?.copyWith(color: cs.primary),
+                  ),
               ],
             ),
             const Spacer(),
@@ -637,11 +699,11 @@ enum _Data {
   final String label;
 
   List<MenuItem> get items => switch (this) {
-        _Data.normal => kMenu,
-        _Data.longName => kLongNameMenu,
-        _Data.empty => const <MenuItem>[],
-        _Data.big => kBigMenu,
-      };
+    _Data.normal => kMenu,
+    _Data.longName => kLongNameMenu,
+    _Data.empty => const <MenuItem>[],
+    _Data.big => kBigMenu,
+  };
 }
 
 class LabHarness extends StatefulWidget {
@@ -666,7 +728,10 @@ class _LabHarnessState extends State<LabHarness> {
     return MaterialApp(
       title: 'Lab 04 · device harness',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true, colorSchemeSeed: const Color(0xFF455A64)),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: const Color(0xFF455A64),
+      ),
       home: Builder(
         builder: (context) => Scaffold(
           body: SafeArea(
@@ -771,8 +836,8 @@ class _LabHarnessState extends State<LabHarness> {
     final padding = !_insets
         ? EdgeInsets.zero
         : _landscape
-            ? const EdgeInsets.only(left: 32, bottom: 20)
-            : const EdgeInsets.only(top: 32, bottom: 20);
+        ? const EdgeInsets.only(left: 32, bottom: 20)
+        : const EdgeInsets.only(top: 32, bottom: 20);
     // While the keyboard is up, phones report no bottom padding.
     final safe = keyboard > 0 ? padding.copyWith(bottom: 0) : padding;
     final media = MediaQuery.of(context).copyWith(
@@ -834,7 +899,9 @@ class _LabHarnessState extends State<LabHarness> {
                             right: 0,
                             bottom: 0,
                             height: safe.bottom,
-                            child: const IgnorePointer(child: _FakeGestureBar()),
+                            child: const IgnorePointer(
+                              child: _FakeGestureBar(),
+                            ),
                           ),
                         if (keyboard > 0)
                           Positioned(
@@ -868,7 +935,10 @@ class _FakeStatusBar extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text('9:41', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+            child: Text(
+              '9:41',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            ),
           ),
         ),
         Center(
@@ -921,7 +991,8 @@ class _FakeKeyboard extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
-                    for (final letter in row.split('')) Expanded(child: _Key(letter)),
+                    for (final letter in row.split(''))
+                      Expanded(child: _Key(letter)),
                   ],
                 ),
               ),
