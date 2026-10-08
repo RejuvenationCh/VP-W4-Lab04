@@ -31,3 +31,7 @@ Checked: Tablet normal, long name, and dark mode tests pass.
 Problem: The screen crashed when the menu had zero items.
 Fix: Show an empty state with an icon, message, and reset action. The promo strip now handles zero or one promo item.
 Checked: The zero item test passes, and all 16 required test cases pass.
+
+Problem: The order button sat under the gesture bar when the screen had a bottom inset.
+Fix: Put the cart bar inside SafeArea so it moves above the inset.
+Checked: The notch and gesture bar test passes. All 17 test cases pass.

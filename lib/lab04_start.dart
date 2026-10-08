@@ -406,10 +406,13 @@ class _MenuScreenState extends State<MenuScreen> {
           );
         },
       ),
-      bottomNavigationBar: CartBar(
-        count: _count,
-        total: _total,
-        onOrder: _order,
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: CartBar(
+          count: _count,
+          total: _total,
+          onOrder: _order,
+        ),
       ),
     );
   }
