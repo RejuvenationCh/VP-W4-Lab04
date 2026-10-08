@@ -1,37 +1,51 @@
 # Lab 04 Fix Log
 
-Problem: Category chips ran off the right edge on a small phone.
-Fix: Made the chip row scroll sideways so every category stays reachable.
-Checked: The small phone test no longer reports a CategoryBar overflow.
+- Widget : CategoryBar
+  Error / symptom : Chips ran past the right edge on a small phone.
+  Rule broken : The Row's children needed more width than its parent provided.
+  Fix : Made the chip row scroll horizontally.
 
-Problem: The store name and rating overflowed to the right on a small phone.
-Fix: Let the header text use the available width and shorten long lines with ellipsis.
-Checked: Small phone portrait and landscape tests no longer report a StoreHeader overflow.
+- Widget : StoreHeader
+  Error / symptom : Store name and rating overflowed to the right.
+  Rule broken : The Row did not limit the width of its text.
+  Fix : Gave the text flexible space and limited long lines.
 
-Problem: Two promo cards overflowed the right edge, and long names overflowed a card vertically.
-Fix: Made the promo strip scroll sideways and let card height follow its text. Long names use at most two lines.
-Checked: Small phone portrait and landscape tests and the tablet long name test no longer report promo card overflows.
+- Widget : PromoStrip
+  Error / symptom : Two cards did not fit across a small phone.
+  Rule broken : The cards together were wider than the width passed down.
+  Fix : Made the promo strip scroll horizontally.
 
-Problem: Menu item names and prices overflowed the right edge on a small phone.
-Fix: Put the name and price in the flexible part of each row. Long names use at most two lines.
-Checked: Small phone portrait, landscape, and long name tests no longer report MenuTile overflows.
+- Widget : PromoCard
+  Error / symptom : A long product name overflowed the card vertically.
+  Rule broken : The fixed card height was smaller than its content.
+  Fix : Let the card height follow its content and limited names to two lines.
 
-Problem: The cart summary and wide order button overflowed the right edge on a small phone.
-Fix: Let the summary use the remaining width and let the button size to its label.
-Checked: The 320 dp small phone portrait test passes.
+- Widget : MenuTile
+  Error / symptom : Item names and prices overflowed to the right.
+  Rule broken : The Row gave its text more width than was available.
+  Fix : Put the name and price in flexible space and limited long names.
 
-Problem: The fixed sections of the screen were taller than the available space in landscape.
-Fix: Put the header, search, categories, promos, and menu in one scrollable view. Menu items are built as needed.
-Checked: All three landscape tests, both keyboard tests, and the 500 item test pass.
+- Widget : CartBar
+  Error / symptom : Summary and order button overflowed to the right.
+  Rule broken : Their combined widths exceeded the width from the parent.
+  Fix : Let the summary use remaining space and the button size to its label.
 
-Problem: Tablet cards overflowed vertically because four square columns left too little room for their content.
-Fix: Used two grid columns and limited long product names to two lines.
-Checked: Tablet normal, long name, and dark mode tests pass.
+- Widget : MenuScreen
+  Error / symptom : Fixed sections overflowed the bottom in landscape.
+  Rule broken : The Column's children were taller than the available height.
+  Fix : Made the page one scrollable view with lazy menu items and a LayoutBuilder breakpoint.
 
-Problem: The screen crashed when the menu had zero items.
-Fix: Show an empty state with an icon, message, and reset action. The promo strip now handles zero or one promo item.
-Checked: The zero item test passes, and all 16 required test cases pass.
+- Widget : MenuCard
+  Error / symptom : Tablet grid cards overflowed vertically.
+  Rule broken : Four square grid cells left too little height for the card content.
+  Fix : Used two grid columns and limited long names to two lines.
 
-Problem: The order button sat under the gesture bar when the screen had a bottom inset.
-Fix: Put the cart bar inside SafeArea so it moves above the inset.
-Checked: The notch and gesture bar test passes. All 17 test cases pass.
+- Widget : MenuScreen
+  Error / symptom : Zero items caused a crash.
+  Rule broken : No constraint rule was broken. Reading missing promo items prevented layout.
+  Fix : Added an empty state with an icon, message, and action, and handled fewer than two promos.
+
+- Widget : CartBar
+  Error / symptom : Order button sat under the gesture bar.
+  Rule broken : The button was positioned inside the bottom system inset.
+  Fix : Wrapped the cart bar in SafeArea.
