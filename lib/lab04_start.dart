@@ -466,12 +466,15 @@ class PromoStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(Gap.md),
-      child: Row(
-        children: [
-          PromoCard(item: first),
-          const SizedBox(width: Gap.md),
-          PromoCard(item: second),
-        ],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            PromoCard(item: first),
+            const SizedBox(width: Gap.md),
+            PromoCard(item: second),
+          ],
+        ),
       ),
     );
   }
@@ -489,17 +492,19 @@ class PromoCard extends StatelessWidget {
 
     return SizedBox(
       width: 200,
-      height: 150,
       child: Card(
         margin: EdgeInsets.zero,
         color: cs.tertiaryContainer,
         child: Padding(
           padding: const EdgeInsets.all(Gap.md),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'PROMO HARI INI',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: text.labelSmall?.copyWith(
                   color: cs.onTertiaryContainer,
                   letterSpacing: 1.2,
@@ -508,11 +513,13 @@ class PromoCard extends StatelessWidget {
               const SizedBox(height: Gap.xs),
               Text(
                 item.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: text.titleMedium?.copyWith(
                   color: cs.onTertiaryContainer,
                 ),
               ),
-              const Spacer(),
+              const SizedBox(height: Gap.sm),
               Text(
                 rupiah(item.price),
                 style: text.titleSmall?.copyWith(
