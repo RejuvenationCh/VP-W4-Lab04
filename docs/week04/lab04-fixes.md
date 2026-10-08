@@ -19,3 +19,7 @@ Checked: Small phone portrait, landscape, and long name tests no longer report M
 Problem: The cart summary and wide order button overflowed the right edge on a small phone.
 Fix: Let the summary use the remaining width and let the button size to its label.
 Checked: The 320 dp small phone portrait test passes.
+
+Problem: The fixed sections of the screen were taller than the available space in landscape.
+Fix: Put the header, search, categories, promos, and menu in one scrollable view. Menu items are built as needed.
+Checked: All three landscape tests, both keyboard tests, and the 500 item test pass.

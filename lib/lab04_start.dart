@@ -301,57 +301,71 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     final visible = _visible;
     final promos = widget.items.where((item) => item.promo).toList();
-    final isTablet = MediaQuery.sizeOf(context).width > 600;
-
     return Scaffold(
       appBar: AppBar(title: const Text('Menu')),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const StoreHeader(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Gap.md),
-            child: SearchBar(
-              key: const Key('search-field'),
-              hintText: 'Cari menu…',
-              leading: const Icon(Icons.search),
-              onChanged: (value) => setState(() => _query = value),
-            ),
-          ),
-          const SizedBox(height: Gap.sm),
-          CategoryBar(
-            selected: _category,
-            onSelected: (category) => setState(() => _category = category),
-          ),
-          PromoStrip(first: promos[0], second: promos[1]),
-          Expanded(
-            child: isTablet
-                ? GridView.count(
-                    crossAxisCount: 4,
-                    padding: const EdgeInsets.all(Gap.md),
-                    mainAxisSpacing: Gap.md,
-                    crossAxisSpacing: Gap.md,
-                    children: [
-                      for (final item in visible)
-                        MenuCard(
-                          item: item,
-                          quantity: _qty[item.id] ?? 0,
-                          onAdd: () => _add(item),
-                        ),
-                    ],
-                  )
-                : ListView(
-                    children: [
-                      for (final item in visible)
-                        MenuTile(
-                          item: item,
-                          quantity: _qty[item.id] ?? 0,
-                          onAdd: () => _add(item),
-                        ),
-                    ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isTablet = constraints.maxWidth >= 600;
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const StoreHeader(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: Gap.md),
+                      child: SearchBar(
+                        key: const Key('search-field'),
+                        hintText: 'Cari menu…',
+                        leading: const Icon(Icons.search),
+                        onChanged: (value) => setState(() => _query = value),
+                      ),
+                    ),
+                    const SizedBox(height: Gap.sm),
+                    CategoryBar(
+                      selected: _category,
+                      onSelected: (category) => setState(() => _category = category),
+                    ),
+                    PromoStrip(first: promos[0], second: promos[1]),
+                  ],
+                ),
+              ),
+              if (isTablet)
+                SliverPadding(
+                  padding: const EdgeInsets.all(Gap.md),
+                  sliver: SliverGrid.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      mainAxisSpacing: Gap.md,
+                      crossAxisSpacing: Gap.md,
+                    ),
+                    itemCount: visible.length,
+                    itemBuilder: (context, index) {
+                      final item = visible[index];
+                      return MenuCard(
+                        item: item,
+                        quantity: _qty[item.id] ?? 0,
+                        onAdd: () => _add(item),
+                      );
+                    },
                   ),
-          ),
-        ],
+                )
+              else
+                SliverList.builder(
+                  itemCount: visible.length,
+                  itemBuilder: (context, index) {
+                    final item = visible[index];
+                    return MenuTile(
+                      item: item,
+                      quantity: _qty[item.id] ?? 0,
+                      onAdd: () => _add(item),
+                    );
+                  },
+                ),
+            ],
+          );
+        },
       ),
       bottomNavigationBar: CartBar(
         count: _count,
