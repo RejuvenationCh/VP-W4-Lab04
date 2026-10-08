@@ -27,3 +27,7 @@ Checked: All three landscape tests, both keyboard tests, and the 500 item test p
 Problem: Tablet cards overflowed vertically because four square columns left too little room for their content.
 Fix: Used two grid columns and limited long product names to two lines.
 Checked: Tablet normal, long name, and dark mode tests pass.
+
+Problem: The screen crashed when the menu had zero items.
+Fix: Show an empty state with an icon, message, and reset action. The promo strip now handles zero or one promo item.
+Checked: The zero item test passes, and all 16 required test cases pass.

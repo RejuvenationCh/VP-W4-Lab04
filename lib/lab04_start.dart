@@ -264,6 +264,13 @@ class _MenuScreenState extends State<MenuScreen> {
   String _query = '';
   String _category = kCategories.first;
   final Map<String, int> _qty = {};
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   List<MenuItem> get _visible => widget.items.where((item) {
     final matchesQuery =
@@ -317,6 +324,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: Gap.md),
                       child: SearchBar(
                         key: const Key('search-field'),
+                        controller: _searchController,
                         hintText: 'Cari menu…',
                         leading: const Icon(Icons.search),
                         onChanged: (value) => setState(() => _query = value),
@@ -327,11 +335,42 @@ class _MenuScreenState extends State<MenuScreen> {
                       selected: _category,
                       onSelected: (category) => setState(() => _category = category),
                     ),
-                    PromoStrip(first: promos[0], second: promos[1]),
+                    if (promos.isNotEmpty)
+                      PromoStrip(
+                        first: promos[0],
+                        second: promos.length > 1 ? promos[1] : null,
+                      ),
                   ],
                 ),
               ),
-              if (isTablet)
+              if (visible.isEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(Gap.lg),
+                    child: Center(
+                      key: const Key('empty-state'),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.search_off, size: 48),
+                          const SizedBox(height: Gap.sm),
+                          const Text('Tidak ada menu yang ditemukan'),
+                          TextButton(
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() {
+                                _query = '';
+                                _category = kCategories.first;
+                              });
+                            },
+                            child: const Text('Reset filter'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              else if (isTablet)
                 SliverPadding(
                   padding: const EdgeInsets.all(Gap.md),
                   sliver: SliverGrid.builder(
@@ -471,10 +510,10 @@ class CategoryBar extends StatelessWidget {
 }
 
 class PromoStrip extends StatelessWidget {
-  const PromoStrip({super.key, required this.first, required this.second});
+  const PromoStrip({super.key, required this.first, this.second});
 
   final MenuItem first;
-  final MenuItem second;
+  final MenuItem? second;
 
   @override
   Widget build(BuildContext context) {
@@ -485,8 +524,10 @@ class PromoStrip extends StatelessWidget {
         child: Row(
           children: [
             PromoCard(item: first),
-            const SizedBox(width: Gap.md),
-            PromoCard(item: second),
+            if (second case final item?) ...[
+              const SizedBox(width: Gap.md),
+              PromoCard(item: item),
+            ],
           ],
         ),
       ),
