@@ -418,17 +418,20 @@ class CategoryBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Gap.md),
-      child: Row(
-        children: [
-          for (final category in kCategories) ...[
-            ChoiceChip(
-              label: Text(category),
-              selected: category == selected,
-              onSelected: (_) => onSelected(category),
-            ),
-            const SizedBox(width: Gap.sm),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (final category in kCategories) ...[
+              ChoiceChip(
+                label: Text(category),
+                selected: category == selected,
+                onSelected: (_) => onSelected(category),
+              ),
+              const SizedBox(width: Gap.sm),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
